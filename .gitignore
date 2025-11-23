@@ -1,6 +1,6 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
-# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,macos,linux,cmake,c++,python
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,macos,linux,cmake,c++,python
+# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,ninja,macos,linux,cmake,c++,python
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,ninja,macos,linux,cmake,c++,python
 
 ### C++ ###
 # Prerequisites
@@ -102,6 +102,10 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
+
+### Ninja ###
+.ninja_deps
+.ninja_log
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -319,7 +323,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,macos,linux,cmake,c++,python
+# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,ninja,macos,linux,cmake,c++,python
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
+/*/build/*
