@@ -85,11 +85,7 @@ int main(void) {
       counter = 40;
     } else if (counter > 0) {
       // If counter is above 0, toggle PIN_LED on and decrement counter
-      uint8_t led_state = gpio_read(GPIOB, PIN_LED);
-      if (led_state == LEVEL_OFF) {
-        gpio_write(GPIOB, PIN_LED, LEVEL_ON);
-      }
-
+      gpio_write(GPIOB, PIN_LED, LEVEL_ON);
       counter--;
     } else {
       // Otherwise, toggle PIN_LED off
