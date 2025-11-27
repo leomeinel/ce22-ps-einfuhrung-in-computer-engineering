@@ -52,6 +52,8 @@
  * URL: https://www.apache.org/licenses/LICENSE-2.0
  */
 
+// This code is inspired by: https://github.com/FrankBau/hello_nucleo
+
 #include "delay.h"
 #include "gpio.h"
 #include "uart.h"
