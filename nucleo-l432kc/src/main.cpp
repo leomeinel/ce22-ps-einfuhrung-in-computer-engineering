@@ -29,7 +29,7 @@ int main(void) {
 
     if (c == 't' || button == 0) {
       gpio_write(GPIOB, 3, 1);
-      delay_ms(3000);
+      delay_ms(5000);
       gpio_write(GPIOB, 3, 0);
     }
   }
