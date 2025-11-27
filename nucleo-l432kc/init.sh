@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###
-# File: configure.sh
+# File: init.sh
 # Author: Leopold Johannes Meinel (leo@meinel.dev)
 # -----
 # Copyright (c) 2025 Leopold Johannes Meinel & contributors
