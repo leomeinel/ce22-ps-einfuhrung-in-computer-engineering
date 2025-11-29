@@ -329,3 +329,4 @@ $RECYCLE.BIN/
 
 /*/build/*
 /*/output/*
+/*/.cache/*
