@@ -1,4 +1,4 @@
-// This code is copied from: https://github.com/FrankBau/hello_nucleo
+// Source: https://github.com/FrankBau/hello_nucleo
 
 #ifndef __UART_H
 #define __UART_H
@@ -17,60 +17,70 @@
 // PA15   ------> USART2_RX     pin alternate function: AF3 (see data sheet)
 
 // USART2 initialization at 115200 baud 8N1
-static inline void uart_init(void) {
-
+static inline void uart_init()
+{
+  // NOLINTBEGIN(cppcoreguidelines-pro-type-cstyle-cast, performance-no-int-to-ptr, hicpp-signed-bitwise)
   // setup UART pins:
-  RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN; // enable clock for peripheral component
-  (void)RCC->AHB2ENR; // ensure that the last write command finished and the
-                      // clock is on
+  RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;  // enable clock for peripheral component
+  (void)RCC->AHB2ENR;                   // ensure that the last write command finished and the
+                                        // clock is on
 
-  GPIOA->MODER = (GPIOA->MODER & ~GPIO_MODER_MODE2_Msk) |
-                 (2 << GPIO_MODER_MODE2_Pos); // set AF mode
-  GPIOA->AFR[0] = (GPIOA->AFR[0] & ~GPIO_AFRL_AFSEL2_Msk) |
-                  (7 << GPIO_AFRL_AFSEL2_Pos); // set pin AF7
+  GPIOA->MODER = (GPIOA->MODER & ~GPIO_MODER_MODE2_Msk) | (2 << GPIO_MODER_MODE2_Pos);  // set AF mode
+  constexpr uint8_t PIN_AF7 = 7;
+  GPIOA->AFR[0] = (GPIOA->AFR[0] & ~GPIO_AFRL_AFSEL2_Msk) | (PIN_AF7 << GPIO_AFRL_AFSEL2_Pos);  // set pin AF7
 
-  GPIOA->MODER = (GPIOA->MODER & ~GPIO_MODER_MODE10_Msk) |
-                 (2 << GPIO_MODER_MODE10_Pos); // set AF mode
-  GPIOA->AFR[1] = (GPIOA->AFR[1] & ~GPIO_AFRH_AFSEL15_Msk) |
-                  (3 << GPIO_AFRH_AFSEL15_Pos); // set pin AF3
+  GPIOA->MODER = (GPIOA->MODER & ~GPIO_MODER_MODE10_Msk) | (2 << GPIO_MODER_MODE10_Pos);  // set AF mode
+  constexpr uint8_t PIN_AF3 = 3;
+  GPIOA->AFR[1] = (GPIOA->AFR[1] & ~GPIO_AFRH_AFSEL15_Msk) | (PIN_AF3 << GPIO_AFRH_AFSEL15_Pos);  // set pin AF3
 
   // setup USART2
 
-  RCC->APB1ENR1 |=
-      RCC_APB1ENR1_USART2EN; // enable clock for peripheral component
-  (void)RCC->APB1ENR1; // ensure that the last instruction finished and the
-                       // clock is now on
+  RCC->APB1ENR1 |= RCC_APB1ENR1_USART2EN;  // enable clock for peripheral component
+  (void)RCC->APB1ENR1;                     // ensure that the last instruction finished and the clock is now on
 
-  USART2->BRR =
-      4000000 / 115200; // set baud rate = 115200 baud, assuming SYSCLK = 4 MHz
-  USART2->CR1 =
-      USART_CR1_UE | USART_CR1_RE | USART_CR1_TE; // enable UART, RX, TX
+  constexpr int SYSCLK = 4000000;
+  constexpr int BAUD_RATE = 115200;
+  USART2->BRR = SYSCLK / BAUD_RATE;                          // set baud rate = 115200 baud, assuming SYSCLK = 4 MHz
+  USART2->CR1 = USART_CR1_UE | USART_CR1_RE | USART_CR1_TE;  // enable UART, RX, TX
+  // NOLINTEND(cppcoreguidelines-pro-type-cstyle-cast, performance-no-int-to-ptr, hicpp-signed-bitwise)
 }
 
 // blocking version of putc: waits until character is sent
-static inline void uart_putc(char c) {
-  while (!(USART2->ISR & USART_ISR_TXE)) {
-  } // wait until transmit data register is empty
-  USART2->TDR = c; // write character to data register
+static inline void uart_putc(char character)
+{
+// NOLINTBEGIN(cppcoreguidelines-pro-type-cstyle-cast, performance-no-int-to-ptr)
+#pragma unroll
+  while ((USART2->ISR & USART_ISR_TXE) == 0U)
+  {
+  }  // wait until transmit data register is empty
+  USART2->TDR = character;  // write character to data register
+  // NOLINTEND(cppcoreguidelines-pro-type-cstyle-cast, performance-no-int-to-ptr)
 }
 
 // blocking version of puts: waits until all characters are sent
-static inline void uart_puts(const char *s) {
-  while (*s) {
-    uart_putc(*s++);
+static inline void uart_puts(const char* string_)
+{
+#pragma unroll
+  while (*string_ != 0U)
+  {
+    // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    uart_putc(*string_++);
+    // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
   }
 }
 
 // non-blocking version of getc: returns -1 if no character is available
-static inline int uart_getc(void) {
-  USART2->ICR =
-      USART_ICR_ORECF; // clear overrun error flag (set when chars were missed)
-  if (USART2->ISR & USART_ISR_RXNE) { // RXNE flag set?
-    char ch =
-        (char)USART2->RDR; // reading RDR automagically clears the RXNE flag
-    return ch;
+static inline int uart_getc()
+{
+  // NOLINTBEGIN(cppcoreguidelines-pro-type-cstyle-cast, performance-no-int-to-ptr)
+  USART2->ICR = USART_ICR_ORECF;  // clear overrun error flag (set when chars were missed)
+  if (USART2->ISR & USART_ISR_RXNE)
+  {                                      // RXNE flag set?
+    char character = (char)USART2->RDR;  // reading RDR automagically clears the RXNE flag
+    return character;
   }
-  return -1; // no character received
+  return -1;  // no character received
+  // NOLINTEND(cppcoreguidelines-pro-type-cstyle-cast, performance-no-int-to-ptr)
 }
 
 #endif
