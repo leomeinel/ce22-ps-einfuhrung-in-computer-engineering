@@ -1,3 +1,17 @@
+<!-- omit in toc -->
+# NUCLEO-L432KC Aufgabe
+
+|                 |                                                   |
+| --------------- | ------------------------------------------------- |
+| **Verfasser**   | Leopold Johannes Meinel                           |
+| **Datum**       | 2025-12-31                                        |
+| **Studiengang** | Computer Engineering (B)                          |
+| **Fachbereich** | Ingenieurwissenschaften – Energie und Information |
+| **Einrichtung** | Hochschule für Technik und Wirtschaft Berlin      |
+| **Betreuer**    | Prof. Bauernöppel                                 |
+
+<div style="page-break-after: always;"></div>
+
 # Inhaltsverzeichnis
 
 1. [Inhaltsverzeichnis](#inhaltsverzeichnis)
